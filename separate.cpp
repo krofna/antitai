@@ -156,6 +156,10 @@ int tree_tree(const tree &t1, // antichain tree
 
             solution = max(solution, tree_path_sum + tree_tree(t2, t1, mt, m, dpt, dp, gammat, gamma, vp, up));
             solution = max(solution, dfs2(up, vp));
+
+            for (int z : t1.children[t1.parent[up]])
+                if (z != up)
+                    tree_path_sum -= tree_path(t1, t2, m, gamma[v], z, v, vp);
         }
         return solution;
     };
