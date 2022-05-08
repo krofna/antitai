@@ -91,7 +91,7 @@ array2d read_matrix(const char* filename)
         exit(EXIT_FAILURE);
     }
     int n, m;
-    cin >> n >> m;
+    fin >> n >> m;
     array2d mat(n, m);
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
@@ -108,7 +108,7 @@ int tree_path(const tree &t1, // tree
               int v) // path leaf
 {
     if (dp(x, v) != array2d::NINF)
-        return dp(u, v);
+        return dp(x, v);
 
     int tree_step = m(x, v);
     for (int y : t1.children[x])
@@ -140,8 +140,7 @@ int tree_tree(const tree &t1, // antichain tree
     if (dp(u, v) != array2d::NINF)
         return dp(u, v);
 
-    // select antichain
-    function<int(int, int)> dfs2 = [&](int y, int vp)
+    function<int(int, int)> select_antichain = [&](int y, int vp)
     {
         if (t2.children[vp].empty())
             return tree_path(t1, t2, m, gamma[u], u, v, vp);
@@ -155,7 +154,7 @@ int tree_tree(const tree &t1, // antichain tree
                     tree_path_sum += tree_path(t1, t2, m, gamma[v], z, v, vp);
 
             solution = max(solution, tree_path_sum + tree_tree(t2, t1, mt, m, dpt, dp, gammat, gamma, vp, up));
-            solution = max(solution, dfs2(up, vp));
+            solution = max(solution, select_antichain(up, vp));
 
             for (int z : t1.children[t1.parent[up]])
                 if (z != up)
@@ -164,18 +163,17 @@ int tree_tree(const tree &t1, // antichain tree
         return solution;
     };
 
-    // select path
-    function<int(int)> dfs1 = [&](int x)
+    function<int(int)> select_path = [&](int x)
     {
         int solution = 0;
         for (int vp : t2.children[x])
         {
-            solution = max(solution, dfs2(u, vp));
-            solution = max(solution, dfs1(vp));
+            solution = max(solution, select_antichain(u, vp));
+            solution = max(solution, select_path(vp));
         }
         return solution;
     };
-    return dp(u, v) = dfs1(v);
+    return dp(u, v) = select_path(v);
 }
 
 int main(int argc, char** argv)
@@ -193,7 +191,7 @@ int main(int argc, char** argv)
     array2d dpt(t2.n, t1.n); // path-antichain dp table
     vector<array2d> gamma(t2.n, array2d(t1.n, t2.n)); // tree-path dp table
     vector<array2d> gammat(t1.n, array2d(t2.n, t1.n)); // path-tree dp table
-    int solution = min(tree_tree(t1, t2, m, mt, dp, dpt, gamma, gammat, 0, 0),
+    int solution = max(tree_tree(t1, t2, m, mt, dp, dpt, gamma, gammat, 0, 0),
                        tree_tree(t2, t1, mt, m, dpt, dp, gammat, gamma, 0, 0));
     cout << solution << endl;
 }
