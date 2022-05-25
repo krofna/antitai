@@ -102,22 +102,22 @@ array2d read_matrix(const char* filename)
 int tree_path(const tree &t1, // tree
               const tree &t2, // path
               const array2d &m, // weight matrix
-              array2d& dp, // memoization
+              array2d& gamma, // memoization
               int x, // tree root
               const int u, // path root
               int v) // path leaf
 {
-    if (dp(x, v) != array2d::NINF)
-        return dp(x, v);
+    if (gamma(x, v) != array2d::NINF)
+        return gamma(x, v);
 
     int tree_step = m(x, v);
     for (int y : t1.children[x])
-        tree_step += tree_path(t1, t2, m, dp, y, u, v);
+        tree_step += tree_path(t1, t2, m, gamma, y, u, v);
 
-    int &solution = dp(x, v);
+    int &solution = gamma(x, v);
     if (t2.parent[v] != u)
     {
-        int path_step = m(x, v) + tree_path(t1, t2, m, dp, x, u, t2.parent[v]);
+        int path_step = m(x, v) + tree_path(t1, t2, m, gamma, x, u, t2.parent[v]);
         solution = max(tree_step, path_step);
     }
     else
