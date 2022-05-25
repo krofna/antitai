@@ -140,13 +140,12 @@ int tree_tree(const tree &t1, // antichain tree
     if (dp(u, v) != array2d::NINF)
         return dp(u, v);
 
-    function<int(int, int)> select_antichain = [&](int y, int vp)
+    function<int(int, int, int)> select_antichain = [&](int y, int vp, int tree_path_sum)
     {
         if (t2.children[vp].empty())
             return tree_path(t1, t2, m, gamma[u], u, v, vp);
 
         int solution = 0;
-        int tree_path_sum = 0;
         for (int up : t1.children[y])
         {
             for (int z : t1.children[t1.parent[up]])
@@ -154,7 +153,7 @@ int tree_tree(const tree &t1, // antichain tree
                     tree_path_sum += tree_path(t1, t2, m, gamma[v], z, v, vp);
 
             solution = max(solution, tree_path_sum + tree_tree(t2, t1, mt, m, dpt, dp, gammat, gamma, vp, up));
-            solution = max(solution, select_antichain(up, vp));
+            solution = max(solution, select_antichain(up, vp, tree_path_sum));
 
             for (int z : t1.children[t1.parent[up]])
                 if (z != up)
@@ -168,7 +167,7 @@ int tree_tree(const tree &t1, // antichain tree
         int solution = 0;
         for (int vp : t2.children[x])
         {
-            solution = max(solution, select_antichain(u, vp));
+            solution = max(solution, select_antichain(u, vp, 0));
             solution = max(solution, select_path(vp));
         }
         return solution;
