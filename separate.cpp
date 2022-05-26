@@ -115,7 +115,7 @@ int tree_path(const tree &t1, // tree
         tree_step += tree_path(t1, t2, m, gamma, y, u, v);
 
     int &solution = gamma(x, v);
-    if (t2.parent[v] != u)
+    if (v != u)
     {
         int path_step = m(x, v) + tree_path(t1, t2, m, gamma, x, u, t2.parent[v]);
         solution = max(tree_step, path_step);
