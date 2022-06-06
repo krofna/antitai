@@ -1,7 +1,7 @@
 
 # Sample implementation of a separation algorithm for Tai mapping
 
-The entire implementation is contained in a single file, separate.cpp, which has no dependencies. Simply compile (e.g.)
+Algorithm computes a lower bound on max weight anti Tai mapping. The entire implementation is contained in a single file, separate.cpp, which has no dependencies. Simply compile (e.g.)
 
 > g++ separate.cpp -O2 -o separate
 
