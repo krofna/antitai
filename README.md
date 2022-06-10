@@ -9,7 +9,7 @@ And run
 
 > ./separate tree1 tree2 weight_matrix
 
-examples/ directory contains two sample trees and two sample weight matrices, the first one corresponding to a Tai mapping of weight 4 and the second one to an anti Tai mapping of weight 4. Trees are plaintext files in the following format: (0-indexed nodes, with root in 0)
+examples/ directory contains two sample trees and two sample weight matrices, `ex1.m` corresponding to a Tai mapping of weight 4 and `ex2.m` to an anti Tai mapping of weight 4. Trees are plaintext files in the following format: (0-indexed nodes, with root in 0)
 
     <# of nodes>
     <edge endpoint> <edge endpoint>
